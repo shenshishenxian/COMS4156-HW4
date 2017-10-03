@@ -30,11 +30,6 @@ class Graph(object):
                 source = (e.source_vertex.latitude, e.source_vertex.longitude)
                 target = (e.target_vertex.latitude, e.target_vertex.longitude)
                 e.cost = distance(source, target).miles
-                print v.name
-                print e.source_vertex.name
-                print e.target_vertex.name
-                print e.cost
-                print '\n'
      
 
      #        /**
@@ -63,9 +58,6 @@ class Graph(object):
             c = 0
             if v.prev_vertex:
                 for e in v.adjacent_edges:
-                    # print v.name
-                    # print v.prev_vertex.name
-                    # print '\n'
                     #Find weight of edge then stop searching.
                     if e.target_vertex == v.prev_vertex:
                         c = e.cost
@@ -95,7 +87,6 @@ class Graph(object):
 
             # Visit the minimum value.
             cur_vertex = queue.get()[1]
-            print 'out of queue: ' + cur_vertex.name
             cur_vertex.visited = True
 
             #For every edge of every vertex.
@@ -113,7 +104,6 @@ class Graph(object):
                         e.target_vertex.cost = e.cost
                         e.target_vertex.prev_vertex = cur_vertex
                     queue.put((e.target_vertex.cost, e.target_vertex))
-                    print 'in queue: ' + e.target_vertex.name
 
 
     # /**
@@ -154,7 +144,8 @@ class Graph(object):
         #self.print_adj_list()
         new_graph = self.get_min_spanning_tree(v1.name)
         
-        new_graph.print_adj_list()
+        #new_graph.print_adj_list()
+        new_graph.preorder('New York City')
 
     def print_adj_list(self):
         for u in self.vertices:
@@ -168,8 +159,17 @@ class Graph(object):
             s += "]"
             print s
 
+    def preorder(self, node):
+        print node
+        self.route.append(node)
+        if self.vertices[node].adjacent_edges:
+            for e in self.vertices[node].adjacent_edges:
+                self.preorder(e.target_vertex.name)
+        
+
     def __init__(self):
         self.vertices = {}
+        self.route = []
     
 if __name__ == '__main__':
     Graph()._run()

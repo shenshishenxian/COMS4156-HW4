@@ -9,6 +9,8 @@
         crossorigin="anonymous">
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    {% extends "layout.html" %}
+    {% block body %}
     <script type="text/javascript">
     function initMap() {
         var options = {
@@ -70,9 +72,10 @@
       }
     */
       // Add Marker Function
-      var destination = [];
+      var destination = " ";
       function addMarker(props){
-        destination.push(props.coords);
+        destination += props.coords;
+        destination += ",";
         var marker = new google.maps.Marker({
           position:props.coords,
           map:map,
@@ -96,7 +99,26 @@
           });
         }
 
-      }   
+      }
+        $(function() {
+        var submit_form = function(e) {
+          $.getJSON($SCRIPT_ROOT + '/_findroute', {
+            a: $('input[name="a"]').val(),
+            b: destination
+          }, function(data) {
+            $('#result').text(data.result);
+            $('input[name=a]').focus().select();
+          });
+          return false;
+        };
+        $('a#calculate').bind('click', submit_form);
+        $('input[type=text]').bind('keydown', function(e) {
+          if (e.keyCode == 13) {
+            submit_form(e);
+          }
+        });
+        $('input[name=a]').focus();
+      });  
 }
     </script>
 </head>
@@ -117,6 +139,9 @@
     </div>
     <br><br>
     <div id="map" style="width:100%; height:500px;"></div>
+    <p><input type="text" name="a"><span id="result">?</span></p>
+    <p><a href=# id = "calculate">Best route calculate</a></p>
 </div>
 </body>
+{% endblock %}
 </html>

@@ -10,10 +10,10 @@ class Scenic:
 		self.lng = lng
 
 scenics = {
-	Scenic('NY', 'New York City', 40.730610, -73.935242)
-	Scenic('PA', 'Paris',48.864716, 2.349014)
-	Scenic('BJ','Beijing',39.913818	116.363625)
-	Scenic('LD','London',51.508530	-0.076132)
+	Scenic('NY', 'New York City', 40.730610, -73.935242),
+	Scenic('PA', 'Paris',48.864716, 2.349014),
+	Scenic('BJ','Beijing',39.913818	,116.363625),
+	Scenic('LD','London',51.508530	,-0.076132)
 }
 
 scenic_by_key = {scenic.key: scenic for scenic in scenics}

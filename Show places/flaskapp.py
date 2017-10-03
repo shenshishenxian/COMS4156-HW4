@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, jsonify, request
 from sqlalchemy import *
 from flask import Flask, request, render_template, g, redirect, Response
 import traceback
@@ -48,7 +48,13 @@ def teardown_request(exception):
   except Exception as e:
     pass
 
-
+@app.route("/_findroute")
+def findroute():
+	username = request.args.get('a', 0, type=str)
+	coordinates = request.args.get('b', 0, type=str)
+	"""
+	return jsonify(result=b)	
+	"""
 @app.route("/")
 def  index():
     return render_template('index.html',scenics = scenics)

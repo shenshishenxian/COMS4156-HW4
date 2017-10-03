@@ -73,6 +73,7 @@
     */
       // Add Marker Function
       var destination = " ";
+      destination = destination + "(" + {{scenic.lat}} + " " + {{scenic.lng}} + ")" + ",";
       function addMarker(props){
         destination += props.coords;
         destination += ",";

@@ -47,7 +47,6 @@ def teardown_request(exception):
 def findroute():
     username = request.args.get('a', 0, type=str)
     coordinates = request.args.get('b', 0, type=str)
-    print coordinates
     graph = Graph()
     order_num = 0
     coordinates = coordinates.split(';')
@@ -102,8 +101,16 @@ def save_route(user, route_stops):
         cur = g.conn.execute('INSERT INTO location (name, latitude, longitude) VALUES (\'%s\', \'%s\', \'%s\') RETURNING location_id' % (route.name, route.latitude, route.longitude))
         location_id = cur.fetchone()[0]
         cur = g.conn.execute('INSERT INTO route_location_link (route_id, location_id, order_num) VALUES (\'%s\', \'%s\', \'%s\')' % (route_id, location_id, ordernum))
-    cur.close()
+    print_new_route(user, route_stops)
     return 0
 
+def print_new_route(user, route_stops):
+    print '\nNew saved route for ' + user + ':'
+    stop = ""
+    for route in route_stops:
+        stop += route.name + '(' + route.latitude + ',' + route.longitude + ')'
+        if route != route_stops[-1]:
+            stop += " -> "
+    print stop + '\n'
 
 app.run(debug = True)

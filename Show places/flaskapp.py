@@ -24,6 +24,7 @@ scenics = {
 }
 
 scenic_by_key = {scenic.key: scenic for scenic in scenics}
+scenic_by_coords = {'(scenic.lat, scenic.lng)': scenic for scenic in scenics}
 
 
 @app.before_request
@@ -46,17 +47,16 @@ def teardown_request(exception):
 def findroute():
     username = request.args.get('a', 0, type=str)
     coordinates = request.args.get('b', 0, type=str)
-    key = request.args.get('c', 0, type=str)
-    print key
+    print coordinates
     graph = Graph()
     order_num = 0
     coordinates = coordinates.split(';')
     coordinates = list(filter(None, coordinates))
+
+    scenic = scenic_by_coords.get(coordinates[0])
     for location in coordinates:
-        #location = location.replace(" ", "")
         latlong = re.split(r'[(,)\s]+', location)
         latlong = list(filter(None, latlong))
-        #latlong = location.split('(,)')
         order_num += 1
         v = Vertex('location' + str(order_num), latlong[0], latlong[1])
         graph.vertices['location' + str(order_num)] = v
@@ -69,12 +69,9 @@ def findroute():
     first_stop = 'location' + '1'
     new_graph = graph.get_min_spanning_tree(first_stop)
     new_graph.preorder(new_graph.vertices[first_stop])
-
     save_route(username, new_graph.route)
-    render_template('map.html', sceni)
-    """
-    return jsonify(result=b)    
-    """
+    return render_template('map.html', scenic = scenic)
+   
 @app.route("/")
 def  index():
     return render_template('index.html',scenics = scenics)
@@ -86,20 +83,8 @@ def show_scenic(scenic_code):
         return render_template('map.html', scenic = scenic)
     else:
         abort(404)
-# @app.route("/calculate_route", methods=['POST'])
-# def calculate_route(user, destinations):
-#     # order = 0
-#     # for location in destinations:
-#     #     location_id = g.conn.execute('INSERT INTO locations (name,latitude,longitude) VALUES (%s, %s, %s)', city, location[0],location[1])
-#     #     order += 1
-#     #     g.conn.execute('INSERT INTO user_route (user_id) VALUES (%s)', user)
 
 def save_route(user, route_stops):
-    #create username if none
-    #create user_route
-    #create location obj
-    #create location_link
-
     cur = g.conn.execute('SELECT user_id FROM map_user WHERE username = \'%s\'' % (user))
     row = cur.fetchone()
     if not row:

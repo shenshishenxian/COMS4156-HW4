@@ -18,18 +18,15 @@
             center :{lat:{{scenic.lat}}, lng:{{scenic.lng}} }
         }
         var map = new google.maps.Map(document.getElementById('map'), options);
-
         var marker = new google.maps.Marker({
             iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
             position:{lat:{{scenic.lat}}, lng:{{scenic.lng}} },
             map:map
         });
-
         google.maps.event.addListener(map, 'click', function(event){
         // Add marker
         addMarker({coords:event.latLng});
         });
-
       /*
       // Add marker
       var marker = new google.maps.Marker({
@@ -37,16 +34,13 @@
         map:map,
         icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
       });
-
       var infoWindow = new google.maps.InfoWindow({
         content:'<h1>Lynn MA</h1>'
       });
-
       marker.addListener('click', function(){
         infoWindow.open(map, marker);
       });
       */
-
       // Array of markers
       /*
       var markers = [
@@ -64,7 +58,6 @@
         }
       ];
       
-
       // Loop through markers
       for(var i = 0;i < markers.length;i++){
         // Add marker
@@ -72,34 +65,30 @@
       }
     */
       // Add Marker Function
-      var destination = " ";
-      destination = destination + "(" + {{scenic.lat}} + " " + {{scenic.lng}} + ")" + ",";
+      var destination = "";
+      destination = destination + "(" + {{scenic.lat}} + ", " + {{scenic.lng}} + ")" + ";";
       function addMarker(props){
         destination += props.coords;
-        destination += ",";
+        destination += ";";
         var marker = new google.maps.Marker({
           position:props.coords,
           map:map,
           //icon:props.iconImage
         });
-
         // Check for customicon
         if(props.iconImage){
           // Set icon image
           marker.setIcon(props.iconImage);
         }
-
         // Check content
         if(props.content){
           var infoWindow = new google.maps.InfoWindow({
             content:props.content
           });
-
           marker.addListener('click', function(){
             infoWindow.open(map, marker);
           });
         }
-
       }
         $(function() {
         var submit_form = function(e) {
@@ -127,21 +116,11 @@
 <div class="container">
     <h1>Map of {{scenic.name}}</h1>
     <br>
-    <h4>Select points on map to visit. The most efficient route will be calculated as you add locations.</h4>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Username">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Save Route</button>
-                </span>
-            </div>
-        </div>
-    </div>
+    <h4>Select points on map to visit. Enter your username to save the most efficient route.</h4>
+    <p>Username: <input type="text" name="a"><span id="result"></span></p>
+    <p><a href=# id = "calculate">Calculate best route!</a></p>
     <br><br>
-    <div id="map" style="width:100%; height:500px;"></div>
-    <p><input type="text" name="a"><span id="result">?</span></p>
-    <p><a href=# id = "calculate">Best route calculate</a></p>
+    <div id="map" style="width:100%; height:500px;"></div> 
 </div>
 </body>
 {% endblock %}

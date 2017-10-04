@@ -69,6 +69,10 @@ def findroute():
     new_graph = graph.get_min_spanning_tree(first_stop)
     new_graph.preorder(new_graph.vertices[first_stop])
     save_route(username, new_graph.route)
+    retstr = " "
+    for route in new_graph.route:
+        retstr = retstr + route.name + "(" +  route.latitude + ")" + route.longitude + "; "
+    return jsonify(result=retstr)
     return render_template('map.html', scenic = scenic)
    
 @app.route("/")

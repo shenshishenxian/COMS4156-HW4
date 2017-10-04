@@ -71,7 +71,7 @@ def findroute():
     save_route(username, new_graph.route)
     retstr = " "
     for route in new_graph.route:
-        retstr = retstr + route.name + "(" +  route.latitude + ")" + route.longitude + "; "
+        retstr = retstr + route.name + "(" +  route.latitude + "," + route.longitude + ")" + "; "
     return jsonify(result=retstr)
     return render_template('map.html', scenic = scenic)
    

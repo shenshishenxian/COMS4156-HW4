@@ -22,23 +22,14 @@ class Edge(object):
 
 class Graph(object):
 
-    # Finds the Euclidean distance between two points, which is the weight of
-    # the edge.
     def compute_costs(self):
         for v in self.vertices.values():
             for e in v.adjacent_edges:
                 source = (e.source_vertex.latitude, e.source_vertex.longitude)
                 target = (e.target_vertex.latitude, e.target_vertex.longitude)
                 e.cost = distance(source, target).miles
-     
-
-     #        /**
-     # * Use Prim's algorithm to get a minimum spanning tree.
-     # * 
-     # * @param s
-     # *            Starting Vertex.
-     # * @return Graph of minimum spanning tree.
-     # */
+    
+     # Use Prim's algorithm to get a minimum spanning tree.
     def get_min_spanning_tree(self, start_vertex):
         graph = Graph()
 
@@ -66,12 +57,7 @@ class Graph(object):
 
         return graph
 
-    # /**
-    #  * Prim's algorithm to find a minimum spanning tree.
-    #  * 
-    #  * @param s
-    #  *            Starting vertex.
-    #  */
+    # Prim's algorithm to find a minimum spanning tree.
     def do_prim(self, start_vertex):
         queue = PriorityQueue()
 
@@ -90,7 +76,6 @@ class Graph(object):
             cur_vertex.visited = True
 
             #For every edge of every vertex.
-            #print cur_vertex.adjacent_edges
             for e in cur_vertex.adjacent_edges:
                 e.target_vertex.name
                 # If the edge is adjacent and the vertex has not already
@@ -99,22 +84,13 @@ class Graph(object):
 
                     # Remove the temporary infinite value of v and
                     # replace it with its actual cost.
-                    #print e.target_vertex.cost
                     if e.cost < e.target_vertex.cost:
                         e.target_vertex.cost = e.cost
                         e.target_vertex.prev_vertex = cur_vertex
                     queue.put((e.target_vertex.cost, e.target_vertex))
 
-
-    # /**
-    #  * Add a new edge from u to v. Create new nodes if these nodes don't exist
-    #  * yet. This method permits adding multiple edges between the same nodes.
-    #  * 
-    #  * @param u
-    #  *            the source vertex.
-    #  * @param w
-    #  *            the target vertex.
-    #  */
+    #  Add a new edge from u to v. Create new nodes if these nodes don't exist
+    #  yet. This method permits adding multiple edges between the same nodes.
     def add_edge(self, nameU, nameV, cost):
         if not self.vertices[nameU]:
             self.vertices[nameU.name] = nameU
@@ -136,15 +112,11 @@ class Graph(object):
         self.vertices['London'] = v4
   
         for source in self.vertices:
-            #self.vertices[source].adjacent_edges = []
             for target in self.vertices:
                 if source != target:
                     self.add_edge(source,target,1)
-      
-        #self.print_adj_list()
+ 
         new_graph = self.get_min_spanning_tree(v1.name)
-        
-        #new_graph.print_adj_list()
         new_graph.preorder('New York City')
 
     def print_adj_list(self):
@@ -160,11 +132,10 @@ class Graph(object):
             print s
 
     def preorder(self, node):
-        print node
         self.route.append(node)
-        if self.vertices[node].adjacent_edges:
-            for e in self.vertices[node].adjacent_edges:
-                self.preorder(e.target_vertex.name)
+        if node.adjacent_edges:
+            for e in node.adjacent_edges:
+                self.preorder(e.target_vertex)
         
 
     def __init__(self):
